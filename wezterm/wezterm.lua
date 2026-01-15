@@ -26,6 +26,7 @@ config.automatically_reload_config = true
 config.enable_kitty_keyboard = false
 config.status_update_interval = 500
 config.term = "xterm-256color"
+config.default_prog = { "pwsh.exe" }
 
 ----------------------------------------------------
 -- Font / Input
@@ -80,17 +81,6 @@ config.keys = {
     mods = "CTRL|SHIFT",
     action = wezterm.action.ActivatePaneDirection("Prev"),
   },
-  -- フォントサイズ変更
-  {
-    key = "+",
-    mods = "CTRL|SHIFT",
-    action = wezterm.action.IncreaseFontSize,
-  },
-  {
-    key = "-",
-    mods = "CTRL",
-    action = wezterm.action.DecreaseFontSize,
-  },
   {
     key = "0",
     mods = "CTRL",
@@ -138,7 +128,7 @@ config.inactive_pane_hsb = {
   saturation = 1.0,
   brightness = 0.4,
 }
-config.color_scheme = 'Tokyo Night'
+config.color_scheme = 'AdventureTime'
 
 ----------------------------------------------------
 -- Tab
@@ -241,6 +231,17 @@ wezterm.on("toggle-transparency-mode", function(window, pane)
   wezterm.GLOBAL.transparency_mode = (wezterm.GLOBAL.transparency_mode + 1) % 3
   apply_transparency_mode(window)
 end)
+
+--[[
+----------------------------------------------------
+-- Launch Menu
+----------------------------------------------------
+config.launch_menu = {
+  { label = "PowerShell", program = "pwsh.exe" },
+  { label = "Command Prompt", program = "cmd.exe" },
+  { label = "WSL (Ubuntu)", program = "wsl.exe" },
+}
+]]
 
 ----------------------------------------------------
 -- Window Layout

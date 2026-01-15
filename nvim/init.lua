@@ -10,17 +10,19 @@ vim.opt.undolevels = 10000
 vim.g.mapleader = " "
 
 
-vim.g.clipboard = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    ['+'] = require('vim.ui.clipboard.osc52').copy('*'),
-  },
-  paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    ['+'] = require('vim.ui.clipboard.osc52').paste('*'),
-  },
-}
+if vim.env.SSH_TTY then
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+  }
+end
 -- CSV/TSV filetype detection for rainbow_csv.nvim
 vim.filetype.add({
   extension = {
@@ -87,4 +89,4 @@ vim.keymap.set("n", "<leader>tb", function()
 end, { silent = true, desc = "Toggle transparency" })
 
 -- F13 を Esc として使う
-vim.keymap.set({ "n", "i", "v", "s" }, "<F13>", "<Esc>", { silent = true })
+vim.keymap.set({ "n", "i", "v", "s" }, "<F12>", "<Esc>", { silent = true })
