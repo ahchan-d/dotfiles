@@ -39,6 +39,8 @@ require("lazy").setup("plugins")
 vim.cmd.colorscheme("solarized-osaka")
 
 -- 背景透過
+local transparent_enabled = true
+
 local function set_transparent()
   vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
@@ -46,10 +48,31 @@ local function set_transparent()
   vim.api.nvim_set_hl(0, "NonText", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
+  vim.api.nvim_set_hl(0, "MsgArea", { fg = "white" })
+  vim.api.nvim_set_hl(0, "LineNr", { fg = "white" })
+end
+
+local function apply_transparency()
+  if transparent_enabled then
+    set_transparent()
+  end
 end
 
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "*",
-  callback = set_transparent,
+  callback = apply_transparency,
 })
-vim.defer_fn(set_transparent, 10)
+vim.defer_fn(apply_transparency, 10)
+
+vim.keymap.set("n", "<leader>tb", function()
+  transparent_enabled = not transparent_enabled
+  if transparent_enabled then
+    apply_transparency()
+  else
+    vim.cmd.colorscheme("solarized-osaka")
+  end
+  vim.notify("Transparency: " .. (transparent_enabled and "on" or "off"))
+end, { silent = true, desc = "Toggle transparency" })
+
+-- F13 を Esc として使う
+vim.keymap.set({ "n", "i", "v", "s" }, "<F13>", "<Esc>", { silent = true })

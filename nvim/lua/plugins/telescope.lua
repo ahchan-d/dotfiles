@@ -8,5 +8,16 @@ return {
     { "<leader>g", "<cmd>Telescope live_grep<CR>", desc = "Grep" },
     { "<leader>b", "<cmd>Telescope buffers<CR>", desc = "Buffers" },
   },
-  opts = {},
+  opts = {
+    defaults = {
+      mappings = {
+        --i = {  -- インサートモード
+        --  ["<F13>"] = "close",
+        --},
+        n = {  -- ノーマルモード
+          ["<F13>"] = "close",
+        },
+      },
+    },
+  },
 }
