@@ -25,15 +25,41 @@ return {
       dashboard.button("q", "  Quit", "<cmd>qa<CR>"),
     }
 
-    -- カラー設定
-    vim.api.nvim_set_hl(0, "AlphaHeader", { fg = "#61AFEF" })       -- ヘッダー：青
-    vim.api.nvim_set_hl(0, "AlphaButtons", { fg = "#98C379" })      -- ボタン：緑
-    vim.api.nvim_set_hl(0, "AlphaShortcut", { fg = "#E5C07B" })     -- ショートカット：黄
-    vim.api.nvim_set_hl(0, "AlphaFooter", { fg = "#C678DD" })       -- フッター：紫
+    dashboard.section.footer.val = "Loading plugins..."
 
-    dashboard.section.header.opts.hl = "AlphaHeader"
-    dashboard.section.buttons.opts.hl = "AlphaButtons"
+    -- カラースキームのデフォルト配色を使用
+    dashboard.section.header.opts.hl = "Type"
+    dashboard.section.buttons.opts.hl = "String"
+    dashboard.section.footer.opts.hl = "Comment"
 
     alpha.setup(dashboard.config)
+
+    local function update_footer()
+      local ok, lazy = pcall(require, "lazy")
+      if not ok then
+        return false
+      end
+      local stats = lazy.stats()
+      local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
+      dashboard.section.footer.val = string.format(
+        "Neovim loaded %d/%d plugins in %.2fms",
+        stats.loaded,
+        stats.count,
+        ms
+      )
+      pcall(vim.cmd.AlphaRedraw)
+      return true
+    end
+
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "LazyDone",
+      callback = update_footer,
+    })
+
+    vim.defer_fn(function()
+      if not update_footer() then
+        vim.defer_fn(update_footer, 300)
+      end
+    end, 120)
   end,
 }

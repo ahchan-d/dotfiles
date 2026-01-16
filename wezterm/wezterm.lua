@@ -128,8 +128,8 @@ config.inactive_pane_hsb = {
   saturation = 1.0,
   brightness = 0.4,
 }
-config.color_scheme = 'AdventureTime'
-
+config.color_scheme = 'Kanagawa Dragon (Gogh)'
+-- config.color_scheme = 'AdventureTime'
 ----------------------------------------------------
 -- Tab
 ----------------------------------------------------

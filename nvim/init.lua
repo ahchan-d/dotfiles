@@ -8,6 +8,7 @@ vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("state") .. "/undo"
 vim.opt.undolevels = 10000
 vim.g.mapleader = " "
+require("keymaps")
 
 
 if vim.env.SSH_TTY then
@@ -50,7 +51,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
 
 -- カラースキーム
-vim.cmd.colorscheme("solarized-osaka")
+vim.cmd.colorscheme("kanagawa")
 
 -- 背景透過
 local transparent_enabled = true
@@ -78,15 +79,13 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 vim.defer_fn(apply_transparency, 10)
 
-vim.keymap.set("n", "<leader>tb", function()
+function _G.toggle_transparency()
   transparent_enabled = not transparent_enabled
   if transparent_enabled then
     apply_transparency()
   else
-    vim.cmd.colorscheme("solarized-osaka")
+    vim.cmd.colorscheme("kanagawa")
   end
   vim.notify("Transparency: " .. (transparent_enabled and "on" or "off"))
-end, { silent = true, desc = "Toggle transparency" })
+end
 
--- F13 を Esc として使う
-vim.keymap.set({ "n", "i", "v", "s" }, "<F12>", "<Esc>", { silent = true })
