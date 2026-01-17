@@ -1,6 +1,17 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 local mux = wezterm.mux
+local act = wezterm.action
+
+-- IME オフ
+local zenhan = "C:\\Users\\ahcha\\bin\\zenhan\\bin64\\zenhan.exe"
+local function ime_off()
+  wezterm.background_child_process({ zenhan, "0" })
+end
+
+wezterm.on("ime-off", function(window, pane)
+  ime_off()
+end)
 
 -- position and size
 wezterm.on('gui-startup', function(cmd)
@@ -70,21 +81,44 @@ config.keys = {
     mods = "CTRL|SHIFT",
     action = wezterm.action.PaneSelect({ mode = "SwapWithActive" }),
   },
-  -- ペイン切り替え
+  -- ペイン切り替え（IME オフ付き）
   {
     key = "n",
     mods = "CTRL|SHIFT",
-    action = wezterm.action.ActivatePaneDirection("Next"),
+    action = act.Multiple({
+      act.ActivatePaneDirection("Next"),
+      act.EmitEvent("ime-off"),
+    }),
   },
   {
     key = "p",
     mods = "CTRL|SHIFT",
-    action = wezterm.action.ActivatePaneDirection("Prev"),
+    action = act.Multiple({
+      act.ActivatePaneDirection("Prev"),
+      act.EmitEvent("ime-off"),
+    }),
   },
   {
     key = "0",
     mods = "CTRL",
     action = wezterm.action.ResetFontSize,
+  },
+  -- タブ切り替え（IME オフ付き）
+  {
+    key = "Tab",
+    mods = "CTRL",
+    action = act.Multiple({
+      act.ActivateTabRelative(1),
+      act.EmitEvent("ime-off"),
+    }),
+  },
+  {
+    key = "Tab",
+    mods = "CTRL|SHIFT",
+    action = act.Multiple({
+      act.ActivateTabRelative(-1),
+      act.EmitEvent("ime-off"),
+    }),
   },
   --[[ 矢印キーでペイン移動
   {
@@ -221,6 +255,9 @@ end
 
 wezterm.on("window-focus-changed", function(window, pane)
   apply_transparency_mode(window)
+  if window:is_focused() then
+    ime_off()
+  end
 end)
 
 wezterm.on("update-right-status", function(window, pane)

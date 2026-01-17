@@ -19,3 +19,13 @@ vim.keymap.set("n", "<leader>tq", "<cmd>NvimTreeClose<CR>", { desc = "Tree: Clos
 -- Window resize (Alt+h/l)
 vim.keymap.set("n", "<M-h>", "<cmd>vertical resize -2<CR>", { desc = "Window: Shrink width" })
 vim.keymap.set("n", "<M-l>", "<cmd>vertical resize +2<CR>", { desc = "Window: Grow width" })
+
+-- Copilot
+vim.keymap.set("i", "<Tab>", function()
+  local ok, suggestion = pcall(require, "copilot.suggestion")
+  if ok and suggestion.is_visible() then
+    suggestion.accept()
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+  end
+end, { desc = "Copilot: Accept suggestion or Tab" })

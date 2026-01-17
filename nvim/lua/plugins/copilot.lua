@@ -8,7 +8,7 @@ return {
         enabled = true,
         auto_trigger = true,
         keymap = {
-          accept = "<C-l>",
+          accept = false,  -- keymaps.lua で設定
         },
       },
       panel = { enabled = true },

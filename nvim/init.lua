@@ -1,5 +1,6 @@
 -- 基本設定
 vim.opt.number = true
+vim.opt.relativenumber = true
 
 
 vim.opt.termguicolors = true
@@ -24,17 +25,24 @@ if vim.env.SSH_TTY then
     },
   }
 end
--- CSV/TSV filetype detection for rainbow_csv.nvim
-vim.filetype.add({
-  extension = {
-    csv = "csv",
-    tsv = "tsv",
-  },
-})
+
+-- IME 自動オフ（挿入モード抜けた時）
+if vim.fn.has("win32") == 1 then
+  local zenhan = vim.fn.expand("~/bin/zenhan/bin64/zenhan.exe")
+  vim.api.nvim_create_autocmd("InsertLeave", {
+    callback = function()
+      vim.fn.system(zenhan .. " 0")
+    end,
+  })
+end
 
 -- Terminal title for WezTerm tab name
 vim.o.title = true
 vim.o.titlestring = "Neovim"
+
+-- csv.vim 設定
+vim.g.csv_delim = ","
+vim.g.csv_no_conceal = 1
 
 -- lazy.nvim ブートストラップ
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
